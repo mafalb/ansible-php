@@ -1,0 +1,14 @@
+---
+
+- name: scl is installed
+  package:
+    name: centos-release-scl
+    state: installed
+- name: php-fpm is installed
+  package:
+    name: rh-php70-php-fpm
+    state: installed
+- name: php-fpm service is running
+  service:
+    name: rh-php70-php-fpm 
+    state: started
