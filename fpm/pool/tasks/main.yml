@@ -7,9 +7,10 @@
     group: "{{ group }}"
     shell: /sbin/nologin
     home: "{{ homedir }}"
+
 - name: directory for pool logs exists
   file:
-    path: /var/opt/rh/rh-php70/log/php-fpm/{{ pool }}
+    path: /var/opt/rh/rh-php70/log/{{ pool }}
     state: directory
     owner: "{{ login }}"
     group: "{{ group }}"
