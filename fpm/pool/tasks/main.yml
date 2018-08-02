@@ -1,6 +1,6 @@
 ---
 
-- name: user for php-fpm pool {{ pool }} exists
+- name: user for php-fpm pool {{ php_fpm_pool.pool }} exists
   user:
     name: "{{ login }}"
     uid: "{{ uid }}"
@@ -8,17 +8,8 @@
     shell: /sbin/nologin
     home: "{{ homedir }}"
 
-- name: directory for pool logs exists
-  file:
-    path: /var/opt/rh/rh-php70/log/{{ pool }}
-    state: directory
-    owner: "{{ login }}"
-    group: "{{ group }}"
-
-- name: php-fpm pool {{ pool }} is configured
+- name: php-fpm pool {{ php_fpm_pool.pool }} is configured
   template:
-    src: "{{ item }}"
-    dest: /etc/opt/rh/rh-php70/php-fpm.d/{{ pool }}.conf
+    src: php-fpm.d.j2
+    dest: "{{ php_fpm.etcdir }}/php-fpm.d/{{ pool }}.conf"
   notify: reload php-fpm
-  with_first_found:
-    - php-fpm.d.j2

@@ -2,5 +2,6 @@
 
 php_fpm:
   package: php-fpm
+  etcdir: /etc
 
 pool: fpm

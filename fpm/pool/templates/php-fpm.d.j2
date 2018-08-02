@@ -1,7 +1,7 @@
-; Start a new pool named 'www'.
+; Start a new pool named '{{ php_fpm_pool.pool }}'.
 ; the variable $pool can we used in any directive and will be replaced by the
-; pool name ('www' here)
-[{{ pool }}]
+; pool name ('{{ php_fpm_pool.pool }}' here)
+[{{ php_fpm_pool.pool }}]
 
 ; Per pool prefix
 ; It only applies on the following directives:
