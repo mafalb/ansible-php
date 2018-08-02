@@ -2,5 +2,5 @@
 
 - name: reload php-fpm
   service:
-    name: rh-php70-php-fpm
+    name: "{{ php_fpm.package }}"
     state: reloaded
