@@ -1,7 +1,7 @@
-; Start a new pool named '{{ php_fpm_pool.pool }}'.
+; Start a new pool named '{{ pool }}'.
 ; the variable $pool can we used in any directive and will be replaced by the
-; pool name ('{{ php_fpm_pool.pool }}' here)
-[{{ php_fpm_pool.pool }}]
+; pool name ('{{ pool }}' here)
+[{{ pool }}]
 
 ; Per pool prefix
 ; It only applies on the following directives:
@@ -112,12 +112,12 @@ pm.max_children = 50
 ; The number of child processes created on startup.
 ; Note: Used only when pm is set to 'dynamic'
 ; Default Value: min_spare_servers + (max_spare_servers - min_spare_servers) / 2
-pm.start_servers = 5
+pm.start_servers = {{ pm.start_servers }}
 
 ; The desired minimum number of idle server processes.
 ; Note: Used only when pm is set to 'dynamic'
 ; Note: Mandatory when pm is set to 'dynamic'
-pm.min_spare_servers = 5
+pm.min_spare_servers = {{ pm.min_spare_servers }}
 
 ; The desired maximum number of idle server processes.
 ; Note: Used only when pm is set to 'dynamic'
@@ -319,7 +319,7 @@ ping.response = {{ pool }}
 ; The log file for slow requests
 ; Default Value: not set
 ; Note: slowlog is mandatory if request_slowlog_timeout is set
-slowlog = /var/opt/rh/rh-php70/log/{{ pool }}/slow.log
+slowlog = /var/opt/rh/rh-php70/log/php-fpm/slow.log
 
 ; The timeout for serving a single request after which a PHP backtrace will be
 ; dumped to the 'slowlog' file. A value of '0s' means 'off'.
@@ -364,7 +364,7 @@ slowlog = /var/opt/rh/rh-php70/log/{{ pool }}/slow.log
 ; Note: on highloaded environement, this can cause some delay in the page
 ; process time (several ms).
 ; Default Value: no
-;catch_workers_output = yes
+catch_workers_output = {{ catch_workers_output }}
  
 ; Clear environment in FPM workers
 ; Prevents arbitrary environment variables from reaching FPM worker processes
@@ -413,7 +413,7 @@ slowlog = /var/opt/rh/rh-php70/log/{{ pool }}/slow.log
 ;                specified at startup with the -d argument
 ;php_admin_value[sendmail_path] = /usr/sbin/sendmail -t -i -f www@my.domain.com
 php_flag[display_errors] = off
-php_admin_value[error_log] = /var/opt/rh/rh-php70/log/{{ pool }}/error.log
+php_admin_value[error_log] = /var/opt/rh/rh-php70/log/php-fpm/error.log
 php_admin_flag[log_errors] = on
 ;php_admin_value[memory_limit] = 128M
 

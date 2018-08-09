@@ -2,5 +2,9 @@
 
 php_fpm_pool:
   pool: www
+pm:
+  start_servers: 5
+  min_spare_servers: 5
+catch_workers_output: "no"
 
 homedir: /home/{{ login }}
