@@ -47,7 +47,14 @@
   notify: restart apache
 
 - name: symlink into /etc/profile.d
+  when: php_enabled == true
   file:
     src: "{{ scl_path_prefix }}/{{ php_scl_prefix }}/enable"
     dest: /etc/profile.d/{{ php_scl_prefix }}.sh
     state: link
+
+- name: symlink into /etc/profile.d
+  when: php_enabled != true
+  file:
+    path: /etc/profile.d/{{ php_scl_prefix }}.sh
+    state: absent
