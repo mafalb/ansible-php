@@ -1,0 +1,16 @@
+# vim: ft=yaml ts=2:
+---
+
+- name: set OS specific variables
+  include_vars:
+    file: "{{ ansible_os_family }}.yml"
+
+- debug: var=php
+  tags:
+    - never
+    - debug
+
+- name: php cli is installed
+  package:
+    name: "{{ php.cli.package }}"
+    state: present

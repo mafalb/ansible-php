@@ -1,0 +1,16 @@
+#
+# PHP is an HTML-embedded scripting language which attempts to make it
+# easy for developers to write dynamically generated webpages.
+#
+
+# Cannot load both php5 and php7 modules
+<IfModule !mod_php5.c>
+  <IfModule prefork.c>
+{% if php_enabled == true %}
+    LoadModule php7_module modules/lib{{ php_scl_prefix }}7.so
+{% else %}
+    #LoadModule php7_module modules/lib{{ php_scl_prefix }}7.so
+{% end %}
+  </IfModule>
+</IfModule>
+

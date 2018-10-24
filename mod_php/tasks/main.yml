@@ -1,0 +1,53 @@
+# vim: ft=yaml ts=2:
+---
+
+- name: set OS specific variables
+  include_vars:
+    file: "{{ ansible_os_family }}.yml"
+
+- debug: var=php
+  tags:
+    - never
+    - debug
+
+- name: assertions
+  assert:
+    that:
+      - ansible_os_family in ["RedHat"]
+      - php.package is defined
+
+- name: assertions
+  when: php_scl_prefix is defined
+  assert:
+    that:
+      - apache_scl_prefix is defined
+      - scl_path_prefix is defined
+
+- debug: var=scl_path_prefix
+  tags:
+    - never
+    - debug
+
+- name: php is installed
+  package:
+    name: "{{ php.package }}"
+    state: present
+  notify: restart apache
+
+- debug: msg="/etc/opt/rh/{{ apache_scl_prefix }}/conf.modules.d/15-{{ php_scl_prefix }}-php.conf"
+  tags:
+    - never
+    - debug
+
+- name: mod_php is enabled
+  template:
+    src: "{{ ansible_os_family }}-{{ php_scl_prefix|regex_replace('.+([0-9]{1}).+','\\1') }}.conf.modules.conf.j2"
+    dest: "/etc/opt/rh/{{ apache_scl_prefix }}/conf.modules.d/15-{{ php_scl_prefix }}-php.conf"
+    backup: true
+  notify: restart apache
+
+- name: symlink into /etc/profile.d
+  file:
+    src: "{{ scl_path_prefix }}/{{ php_scl_prefix }}/enable"
+    dest: /etc/profile.d/{{ php_scl_prefix }}.sh
+    state: link

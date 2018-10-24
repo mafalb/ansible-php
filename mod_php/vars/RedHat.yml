@@ -1,0 +1,5 @@
+# vim: ft=yaml ts=2:
+---
+
+php:
+  package: "{{ php_scl_prefix + '-php' if php_scl_prefix is defined else 'php' }}"

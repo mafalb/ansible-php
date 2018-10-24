@@ -1,0 +1,5 @@
+# vim: ft=yaml ts=2:
+---
+
+dependencies:
+  - role: apache
