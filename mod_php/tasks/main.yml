@@ -5,6 +5,11 @@
   include_vars:
     file: "{{ ansible_os_family }}.yml"
 
+- debug: var=apache
+  tags:
+    - never
+    - debug
+
 - debug: var=php
   tags:
     - never
@@ -17,16 +22,10 @@
       - php.package is defined
 
 - name: assertions
-  when: php_scl_prefix is defined
+  when: php_scl_name is defined
   assert:
     that:
-      - apache_scl_prefix is defined
-      - scl_path_prefix is defined
-
-- debug: var=scl_path_prefix
-  tags:
-    - never
-    - debug
+      - apache.scl.prefix is defined
 
 - name: php is installed
   package:
@@ -34,27 +33,27 @@
     state: present
   notify: restart apache
 
-- debug: msg="/etc/opt/rh/{{ apache_scl_prefix }}/conf.modules.d/15-{{ php_scl_prefix }}-php.conf"
+- debug: msg="/etc/opt/{{ apache.scl.prefix }}/conf.modules.d/15-{{ php_scl_name }}-php.conf"
   tags:
     - never
     - debug
 
 - name: mod_php is enabled
   template:
-    src: "{{ ansible_os_family }}-{{ php_scl_prefix|regex_replace('.+([0-9]{1}).+','\\1') }}.conf.modules.conf.j2"
-    dest: "/etc/opt/rh/{{ apache_scl_prefix }}/conf.modules.d/15-{{ php_scl_prefix }}-php.conf"
+    src: "{{ ansible_os_family }}-{{ php_scl_name|regex_replace('.+([0-9]{1}).+','\\1') }}.conf.modules.conf.j2"
+    dest: /etc/opt/{{ apache.scl.prefix }}/{{ apache.scl.name }}/conf.modules.d/15-{{ php_scl_name }}-php.conf
     backup: true
   notify: restart apache
 
 - name: symlink into /etc/profile.d
-  when: php_enabled == true
+  when: php.scl.enabled == true
   file:
-    src: "{{ scl_path_prefix }}/{{ php_scl_prefix }}/enable"
-    dest: /etc/profile.d/{{ php_scl_prefix }}.sh
+    src: /opt/{{ php.scl.prefix }}/{{ php_scl_name }}/enable
+    dest: /etc/profile.d/{{ php_scl_name }}.sh
     state: link
 
 - name: symlink into /etc/profile.d
-  when: php_enabled != true
+  when: php.scl.enabled == false
   file:
-    path: /etc/profile.d/{{ php_scl_prefix }}.sh
+    path: /etc/profile.d/{{ php_scl_name }}.sh
     state: absent

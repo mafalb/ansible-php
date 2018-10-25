@@ -1,5 +1,11 @@
 # vim: ft=yaml ts=2:
 ---
 
+_php_scl_tmpvar: &php_scl_tmpvar "{{ php_scl_name is defined|ternary( php_scl_name|default('') + '-php', 'php') }}"
+
 php:
-  package: "{{ php_scl_prefix + '-php' if php_scl_prefix is defined else 'php' }}"
+  service: *php_scl_tmpvar
+  package: *php_scl_tmpvar
+  scl:
+    name: "{{ php_scl_name|default(false) }}"
+    enabled: "{{ php_scl_enabled }}"

@@ -1,5 +1,7 @@
 # vim: ft=yaml ts=2:
 ---
 
-php_enabled: false
 php:
+  scl:
+    prefix: "{{ php_scl_prefix|default('rh') }}"
+    enabled: false

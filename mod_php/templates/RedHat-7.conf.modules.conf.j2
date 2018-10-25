@@ -6,10 +6,10 @@
 # Cannot load both php5 and php7 modules
 <IfModule !mod_php5.c>
   <IfModule prefork.c>
-{% if php_enabled == true %}
-    LoadModule php7_module modules/lib{{ php_scl_prefix }}-php7.so
+{% if php.scl.enabled == true %}
+    LoadModule php7_module modules/lib{{ php_scl_name }}-php7.so
 {% else %}
-    #LoadModule php7_module modules/lib{{ php_scl_prefix }}-php7.so
+    #LoadModule php7_module modules/lib{{ php_scl_name }}-php7.so
 {% endif %}
   </IfModule>
 </IfModule>
